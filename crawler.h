@@ -1,20 +1,27 @@
 #ifndef CRAWLER_H
 #define CRAWLER_H
+#include <QtCore>
+#include <QCoreApplication>
 #include <QDebug>
 #include <QtNetwork>
-#include <QThread>
-#include <QtCore>
-#include <QList>
-
-class crawler
+#include <QStringList>
+#include "sqlhandle.h"
+class crawler:public QObject
 {
+    Q_OBJECT
 public:
-     crawler();
+    crawler(QString);
     ~crawler();
-     void run();
-     bool createInstance(QString);
+    void run();
+    bool isRunning();
 private:
-    QList<QThread> threads;
+    QString url;
+    bool waitResponse = false;
+    QEventLoop event;
+    QStringList extractScripts(QString html);
+    QNetworkAccessManager qnam;
+    QNetworkReply* reply;
+signals:
+    void resultReady(const QString &s);
 };
-
-#endif // CRAWLER_H
+#endif //crawler_h

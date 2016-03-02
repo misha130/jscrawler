@@ -21,9 +21,9 @@ private:
     const QString GOOGLE_SEARCH = "https://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=";
     void Loop();
     void GetWords();
+    int getRunningThreads();
     QStringList words;
     QStringList serialize2(QByteArray toserialze,QString word,QString data = "data") const;
-
     QStringList serialize(QByteArray toserialze,QString word,QString data = "data") const;
     QThread *mainThread;
     QQueue<QString> websites;
@@ -32,8 +32,10 @@ private:
     QNetworkAccessManager qnam;
     QNetworkReply *reply; //reply of words look up
     bool httpRequestAborted;
+    QEventLoop event;
+
     QByteArray m_data;
-    crawler crawl;
+    QList<crawler *> crawlInstances;
 private slots:
       void httpFinished();
       void httpReadyRead();
